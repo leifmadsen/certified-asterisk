@@ -32,7 +32,7 @@ ENV PKG_LIST automake \
     gsm-devel
 
 # install dependencies
-RUN yum -q makecache && yum install epel-release -y && yum install -q -y $PKG_LIST
+RUN yum -q makecache && yum install tar epel-release -y && yum install -q -y $PKG_LIST
 
 # obtain and extract the source
 WORKDIR $TARGET_DIR
@@ -60,4 +60,4 @@ RUN make install
 # clean up
 WORKDIR $TARGET_DIR
 RUN rm -rf $ASTVERSION
-RUN yum remove -y -q $PKG_LIST && yum autoremove -y && yum clean all
+RUN yum remove -y -q tar $PKG_LIST && yum autoremove -y && yum clean all
