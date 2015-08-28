@@ -1,0 +1,18 @@
+# Version: 0.0.1
+FROM centos:7
+
+MAINTAINER AVOXI DevOps "devops@avoxi.com"
+ENV REFRESHED_AT 2015-08-27
+ENV DOWNLOAD_URL http://downloads.asterisk.org/pub/telephony/certified-asterisk
+ENV ASTVERSION certified-asterisk-13.1-cert2
+
+LABEL version="13.1-cert2" role="VoIP Server"
+
+ADD buildit.sh $TARGET_DIR/buildit.sh
+RUN $TARGET_DIR/buildit.sh $DOWNLOAD_URL $ASTVERSION && rm -f $TARGET_DIR/buildit.sh
+
+EXPOSE 5060
+EXPOSE 10000-20000
+
+ENTRYPOINT ["/usr/sbin/asterisk"]
+CMD ["-c", "-vvvv", "-g"]
