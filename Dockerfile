@@ -31,11 +31,15 @@ ENV PKG_LIST automake \
     libuuid-devel \
     gsm-devel
 
+# install dependencies
 RUN yum -q makecache && yum install epel-release -y && yum install -q -y $PKG_LIST
 
+# obtain and extract the source
 WORKDIR $TARGET_DIR
 ADD $DOWNLOAD_URL/$ASTVERSION.tar.gz $TARGET_DIR
+RUN tar zxvf $ASTVERSION.tar.gz
 
+# build Asterisk
 WORKDIR $TARGET_DIR/$ASTVERSION
 RUN ./configure
 WORKDIR $TARGET_DIR/$ASTVERSION/menuselect
@@ -52,6 +56,8 @@ RUN menuselect/menuselect \
     --disable-category MENUSELECT_TESTS
 RUN make
 RUN make install
+
+# clean up
 WORKDIR $TARGET_DIR
 RUN rm -rf $ASTVERSION
 RUN yum remove -y -q $PKG_LIST && yum autoremove -y && yum clean all
