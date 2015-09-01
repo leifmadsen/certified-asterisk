@@ -22,7 +22,6 @@ ENV PKG_LIST automake \
     popt-devel \
     libtool-ltdl-devel \
     sqlite-devel \
-    libsq3-devel \
     neon-devel \
     jansson-devel \
     libsrtp-devel \
@@ -63,4 +62,6 @@ RUN rm -rf $ASTVERSION
 RUN yum remove -y -q tar $PKG_LIST && yum autoremove -y && yum clean all
 
 # start the system
-CMD ["/usr/sbin/asterisk", "-c", "-g"]
+WORKDIR /usr/sbin
+ENTRYPOINT [ "asterisk" ]
+CMD [ "-c", "-g" ]
