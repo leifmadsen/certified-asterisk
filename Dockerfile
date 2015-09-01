@@ -1,11 +1,11 @@
 # Version: 0.0.1
 FROM centos:7
 MAINTAINER AVOXI DevOps "devops@avoxi.com"
-ENV REFRESHED_AT 2015-08-27
+ENV REFRESHED_AT 2015-09-01
 ENV DOWNLOAD_URL http://downloads.asterisk.org/pub/telephony/certified-asterisk
 ENV ASTVERSION certified-asterisk-13.1-cert2
 ENV TARGET_DIR /usr/src/
-ENV PKG_LIST automake \
+ENV DEV_PKG_LIST automake \
     gcc \
     gcc-c++ \
     ncurses-devel \
@@ -22,7 +22,6 @@ ENV PKG_LIST automake \
     popt-devel \
     libtool-ltdl-devel \
     sqlite-devel \
-    libsq3-devel \
     neon-devel \
     jansson-devel \
     libsrtp-devel \
@@ -31,8 +30,10 @@ ENV PKG_LIST automake \
     libuuid-devel \
     gsm-devel
 
+ENV RUN_PKG_LIST pjproject jansson neon unixODBC vorbis
+
 # install dependencies
-RUN yum -q makecache && yum install tar epel-release -y && yum install -q -y $PKG_LIST
+RUN yum -q makecache && yum install tar epel-release -y && yum install -q -y $DEV_PKG_LIST $RUN_PKG_LIST
 
 # obtain and extract the source
 WORKDIR $TARGET_DIR
@@ -60,4 +61,9 @@ RUN make install
 # clean up
 WORKDIR $TARGET_DIR
 RUN rm -rf $ASTVERSION
-RUN yum remove -y -q tar $PKG_LIST && yum autoremove -y && yum clean all
+RUN yum remove -y -q tar $DEV_PKG_LIST && yum autoremove -y && yum clean all && rm -f $TARGET_DIR/$ASTVERSION.tar.gz
+
+# start the system
+WORKDIR /usr/sbin
+ENTRYPOINT [ "asterisk" ]
+CMD [ "-c", "-g" ]
