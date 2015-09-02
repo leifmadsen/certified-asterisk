@@ -28,9 +28,11 @@ ENV DEV_PKG_LIST automake \
     pjproject-devel \
     libxslt-devel \
     libuuid-devel \
-    gsm-devel
+    gsm-devel \
+    gmime-devel \
+    iksemel-devel
 
-ENV RUN_PKG_LIST pjproject jansson neon unixODBC vorbis
+ENV RUN_PKG_LIST pjproject jansson neon unixODBC vorbis gmime iksemel
 
 # install dependencies
 RUN yum -q makecache && yum install tar epel-release -y && yum install -q -y $DEV_PKG_LIST $RUN_PKG_LIST
@@ -54,7 +56,13 @@ RUN menuselect/menuselect \
     --disable-category MENUSELECT_MOH \
     --disable-category MENUSELECT_EXTRA_SOUNDS \
     --disable-category MENUSELECT_AGIS \
-    --disable-category MENUSELECT_TESTS
+    --disable-category MENUSELECT_TESTS \
+    --enable res_hep \
+    --enable res_hep_pjsip \
+    --enable res_hep_rtcp \
+    --enable res_statsd \
+    --enable chan_sip
+
 RUN make
 RUN make install
 
