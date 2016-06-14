@@ -1,5 +1,7 @@
 # Certified Asterisk Docker Image (unofficial)
-Docker image for Certified Asterisk 13 (unofficial package). Maintained by AVOXI. Primary purpose is for use during [AstriCon 2015](http://astricon.net) presentation.
+Docker image for Certified Asterisk 13 (unofficial package). Primary purpose is for use during [AstriCon 2015](http://astricon.net) presentation.
+
+**NOTE**: I've contributed work to Asterisk directly for building Asterisk RPMs and Docker images directly within the Git tree. You should use that instead of this. See https://github.com/asterisk/asterisk/tree/master/contrib/docker
 
 ## Running Asterisk
 The following sets of commands will show you how to use the Asterisk image along with some other supporting volume containers to get going.
